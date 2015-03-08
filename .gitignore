@@ -11,6 +11,7 @@
 .Rproj.user/
 
 UCI HAR Dataset/
+data/
 tidy_data.txt
 *.zip
 .Rproj.user
