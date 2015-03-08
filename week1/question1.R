@@ -10,3 +10,8 @@ if (!file.exists("data/ss06hid.csv")) {
     download.file(fileUrl, destfile="data/ss06hid.csv")
 }
 
+data <- read.csv("data/ss06hid.csv")
+
+idaho <- data[which(data$ST=='16'),]
+
+idaho_mil <- idaho[which(idaho$VAL=='24'),]
