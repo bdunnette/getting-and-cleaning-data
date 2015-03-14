@@ -20,11 +20,7 @@ github_token <- oauth2.0_token(oauth_endpoints("github"), myapp)
 gtoken <- config(token = github_token)
 req <- GET("https://api.github.com/users/jtleek/repos", gtoken)
 stop_for_status(req)
-repos <- parsed_content(req)
-print(repos[[1]])
-print(repos[which(repos[,'name'] == 'ballgown'), ])
-
-# OR:
-# req <- with_config(gtoken, GET("https://api.github.com/rate_limit"))
-# stop_for_status(req)
-# content(req)
+repos <- content(req, as="text")
+repos_json <- fromJSON(repos)
+datasharing <- repos_json[repos_json$name=="datasharing",]
+print(datasharing$created_at)
