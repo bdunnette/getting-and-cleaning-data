@@ -16,4 +16,11 @@ if (!file.exists("data/UCI_HAR_Dataset.zip")) {
 # unzip data files to 'data' directory
 unzip("data/UCI_HAR_Dataset.zip", exdir="data")
 
+# get column names from features.txt
+column_names <- read.table("data/UCI HAR Dataset/features.txt")
+
+# read data from both train and test datasets
+train_data <- read.table("data/UCI HAR Dataset/train/X_train.txt")
+test_data <- read.table("data/UCI HAR Dataset/test/X_test.txt")
+
 # write.table() using row.name=FALSE
