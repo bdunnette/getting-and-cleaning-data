@@ -1,1 +1,1 @@
-# Codebook for UCI HAR Dataset
+# Codebook for Getting and Cleaning Data course project
