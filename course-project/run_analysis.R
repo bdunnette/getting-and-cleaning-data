@@ -61,16 +61,36 @@ subject_train <- read.table("data/UCI HAR Dataset/train/subject_train.txt", col.
 subject_test <- read.table("data/UCI HAR Dataset/test/subject_test.txt", col.names=c("subject_id"))
 
 # merge subject, activity, and accelerometer data for each dataset
-data_train <- cbind(dataset="train", subject_train, y_train, x_train)
-data_test <- cbind(dataset="test", subject_test, y_test, x_test)
+data_train <- cbind(subject_train, y_train, x_train)
+data_test <- cbind(subject_test, y_test, x_test)
 
 # merge both datasets
 data_merged <- rbind(data_train, data_test)
 
-# add activity labels
-data_labeled <- merge(activities, data_merged, by="activity_id")
-
 # use dplyr's tbl_df to make data frames more manageable
-data_tbl <- tbl_df(data_labeled)
+data_tbl <- tbl_df(data_merged)
 
-# write.table() using row.name=FALSE
+# select only identifying columns, means, and standard deviations
+data_selected <- select(data_tbl, subject_id, activity_id, contains('mean'), contains('std'))
+
+# label the data set with descriptive activity names. 
+colNames  = colnames(data_selected); 
+colNames <- gsub("(^t)","Time", colNames)
+colNames <- gsub("(^f)","Frequency", colNames)
+colNames <- gsub("mag","Magnitude", colNames, ignore.case=TRUE)
+colNames <- gsub("acc","Acceleration", colNames, ignore.case=TRUE)
+
+# assign the new descriptive column names to the dataset
+colnames(data_selected) = colNames;
+
+# get means of non-identifying columns
+data_summary <- summarise_each(group_by(data_selected, subject_id, activity_id), funs(mean))
+
+# add activity labels
+data_labeled <- merge(activities, data_summary, by="activity_id")
+
+# sort by subject & activity
+data_labeled <- arrange(data_labeled, subject_id, activity_id)
+
+# export data with write.table() using row.names=FALSE for submission
+write.table(data_labeled, file="tidy_data.txt", row.names=FALSE)
