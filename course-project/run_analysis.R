@@ -96,4 +96,3 @@ data_labeled <- arrange(data_labeled, subject_id, activity_id)
 
 # export data with write.table() using row.names=FALSE for submission
 write.table(data_labeled, file="tidy_data.txt", row.names=FALSE, sep="\t")
-write(colnames(data_labeled), file="codebook.md")
