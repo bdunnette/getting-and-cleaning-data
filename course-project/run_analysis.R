@@ -75,10 +75,12 @@ data_selected <- select(data_tbl, subject_id, activity_id, contains('mean'), con
 
 # label the data set with descriptive activity names. 
 colNames  = colnames(data_selected); 
-colNames <- gsub("(^t)","Time", colNames)
-colNames <- gsub("(^f)","Frequency", colNames)
-colNames <- gsub("mag","Magnitude", colNames, ignore.case=TRUE)
-colNames <- gsub("acc","Acceleration", colNames, ignore.case=TRUE)
+colNames <- gsub("(^t)", "Time", colNames)
+colNames <- gsub("(^f)", "Frequency", colNames)
+colNames <- gsub("mag", "Magnitude", colNames, ignore.case=TRUE)
+colNames <- gsub("acc", "Acceleration", colNames, ignore.case=TRUE)
+colNames <- gsub(".std", ".StdDev", colNames)
+colNames <- gsub(".mean", ".Mean", colNames)
 
 # assign the new descriptive column names to the dataset
 colnames(data_selected) = colNames;
@@ -93,4 +95,5 @@ data_labeled <- merge(activities, data_summary, by="activity_id")
 data_labeled <- arrange(data_labeled, subject_id, activity_id)
 
 # export data with write.table() using row.names=FALSE for submission
-write.table(data_labeled, file="tidy_data.txt", row.names=FALSE)
+write.table(data_labeled, file="tidy_data.txt", row.names=FALSE, sep="\t")
+write(colnames(data_labeled), file="codebook.md")
